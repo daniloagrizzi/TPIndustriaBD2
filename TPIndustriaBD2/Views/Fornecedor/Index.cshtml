@@ -1,0 +1,44 @@
+﻿@model IEnumerable<TPIndustriaBD2.Models.ViewModels.FornecedoresEnderecosVM>
+
+@{
+    ViewData["Title"] = "Listagem de Fornecedores e Endereços";
+}
+
+<h2>Listagem de Fornecedores e Endereços</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Contato</th>
+            <th>CEP</th>
+            <th>Rua</th>
+            <th>Número</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var fornecedorEndereco in Model)
+            {
+                <tr>
+                    <td>@fornecedorEndereco.ID_Fornecedor</td>
+                    <td>@fornecedorEndereco.Nome_Fornecedor</td>
+                    <td>@fornecedorEndereco.CNPJ</td>
+                    <td>@fornecedorEndereco.Contato</td>
+                    <td>@fornecedorEndereco.CEP</td>
+                    <td>@fornecedorEndereco.Rua</td>
+                    <td>@fornecedorEndereco.Numero</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">Nenhum fornecedor encontrado.</td>
+            </tr>
+        }
+    </tbody>
+</table>
