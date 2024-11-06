@@ -1,8 +1,39 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<TPIndustriaBD2.Models.Fornecedor>
+
+@{
+    ViewData["Title"] = "Listagem de Fornecedores";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>Listagem de Fornecedores</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Contato</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var fornecedor in Model)
+            {
+                <tr>
+                    <td>@fornecedor.ID_Fornecedor</td>
+                    <td>@fornecedor.Nome_Fornecedor</td>
+                    <td>@fornecedor.CNPJ</td>
+                    <td>@fornecedor.Contato</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">Nenhum fornecedor encontrado.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

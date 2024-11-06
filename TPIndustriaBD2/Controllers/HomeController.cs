@@ -1,32 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using TPIndustriaBD2.Data;
 using TPIndustriaBD2.Models;
 
 namespace TPIndustriaBD2.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly DataAcess _dataAcess;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(DataAcess dataAcess)
         {
-            _logger = logger;
+            _dataAcess = dataAcess;
         }
 
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var fornecedores = _dataAcess.ListarFornecedores();
+            return View(fornecedores);
         }
     }
 }
