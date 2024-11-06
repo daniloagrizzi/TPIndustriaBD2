@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using TPIndustriaBD2.Models;
 using TPIndustriaBD2.Models.ViewModels;
-using Microsoft.Extensions.Configuration; 
+using Microsoft.Extensions.Configuration;
 
 namespace TPIndustriaBD2.Data
 {
@@ -25,7 +25,7 @@ namespace TPIndustriaBD2.Data
 
         public List<Fornecedor> ListarFornecedores()
         {
-            List<Fornecedor> fornecedores = new List<Fornecedor>(); 
+            List<Fornecedor> fornecedores = new List<Fornecedor>();
 
             using (_connection = new SqlConnection(GetConnectionString()))
             {
@@ -49,7 +49,7 @@ namespace TPIndustriaBD2.Data
                 }
             }
 
-            return fornecedores; 
+            return fornecedores;
         }
 
         public List<FornecedoresEnderecosVM> ListarFornecedoresEnderecos()
@@ -83,5 +83,23 @@ namespace TPIndustriaBD2.Data
 
             return fornecedoresEnderecos;
         }
+
+        public void RegistrarCompra(int idProduto, int idFornecedor, int quantidade, decimal valorCompra)
+        {
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                SqlCommand command = new SqlCommand("RegistrarCompra", _connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@ID_Produto", idProduto);
+                command.Parameters.AddWithValue("@ID_Fornecedor", idFornecedor);
+                command.Parameters.AddWithValue("@Quantidade", quantidade);
+                command.Parameters.AddWithValue("@Valor_Compra", valorCompra);
+                _connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
+
