@@ -16,8 +16,8 @@ namespace TPIndustriaBD2.Controllers
         }
         public IActionResult Index()
         {
-
-            return View();
+            var produtos = _dataAcess.ListarProdutos();
+            return View(produtos);
         }
 
         [HttpGet]

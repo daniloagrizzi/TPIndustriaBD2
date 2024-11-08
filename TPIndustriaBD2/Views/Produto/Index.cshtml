@@ -1,0 +1,30 @@
+﻿@model List<TPIndustriaBD2.Models.Produto>
+
+<h2>Lista de Produtos</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome do Produto</th>
+            <th>Preço Médio</th>
+            <th>Saldo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var produto in Model)
+        {
+            <tr>
+                <td>@produto.Nome_Produto</td>
+                <td>@produto.Preco_medio.ToString("C")</td>
+                <td>@produto.Saldo</td>
+                <td>
+                    <!-- Botão para visualizar os detalhes do produto -->
+                    <a href="@Url.Action("Detalhes", "Produto", new { id = produto.ID_Produto })" class="btn btn-info">
+                        Visualizar Detalhes
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

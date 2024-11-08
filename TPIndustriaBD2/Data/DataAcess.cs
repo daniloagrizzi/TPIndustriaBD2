@@ -52,7 +52,36 @@ namespace TPIndustriaBD2.Data
             return fornecedores;
         }
 
-        public List<FornecedoresEnderecosVM> ListarFornecedoresEnderecos()
+        public List<Produto> ListarProdutos()
+        {
+            List<Produto> produtos = new List<Produto>();
+
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                _command = _connection.CreateCommand();
+                _command.CommandType = System.Data.CommandType.StoredProcedure;
+                _command.CommandText = "[DBO].[ListarProdutos]";
+
+                _connection.Open();
+
+                SqlDataReader reader = _command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Produto produto = new Produto();
+                    produto.Nome_Produto = reader["Nome_Produto"].ToString();
+                    produto.Preco_medio = Convert.ToDecimal(reader["Preco_Medio"]);            
+                   produto.Saldo = Convert.ToInt32(reader["Saldo"]);
+
+                    produtos.Add(produto);
+                }
+            }
+
+            return produtos;
+        }
+
+    
+    public List<FornecedoresEnderecosVM> ListarFornecedoresEnderecos()
         {
             List<FornecedoresEnderecosVM> fornecedoresEnderecos = new List<FornecedoresEnderecosVM>();
 
