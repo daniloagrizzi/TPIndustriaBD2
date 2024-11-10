@@ -108,6 +108,37 @@ namespace TPIndustriaBD2.Data
             return setores;
         }
 
+        public List<ListarProdutosConsumidosPorSetor> ListarProdutosConsumidosPorSetor()
+        {
+            List<ListarProdutosConsumidosPorSetor> resultado = new List<ListarProdutosConsumidosPorSetor>();
+
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                _command = _connection.CreateCommand();
+                _command.CommandType = System.Data.CommandType.Text;
+                _command.CommandText = "SELECT Nome_Setor, Nome_Produto FROM ProdutosConsumidosPorSetores";
+
+                _connection.Open();
+                SqlDataReader reader = _command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var setorNome = reader["Nome_Setor"].ToString();
+                    var produtoNome = reader["Nome_Produto"].ToString();
+
+                    var setor = resultado.Find(s => s.Nome_Setor == setorNome);
+                    if (setor == null)
+                    {
+                        setor = new ListarProdutosConsumidosPorSetor { Nome_Setor = setorNome };
+                        resultado.Add(setor);
+                    }
+                    setor.Produtos.Add(produtoNome);
+                }
+            }
+
+            return resultado;
+        }
+
 
         public ProdutoDetailVM DetalharProduto(int idProduto)
         {

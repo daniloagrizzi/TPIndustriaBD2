@@ -1,0 +1,48 @@
+﻿@model IEnumerable<TPIndustriaBD2.Models.ViewModels.ListarProdutosConsumidosPorSetor>
+
+@{
+    ViewData["Title"] = "Produtos Consumidos por Setores";
+}
+
+<h2>Produtos Consumidos por Setores</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Setor</th>
+            <th>Produto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string setorAtual = null;
+        }
+
+        @foreach (var setor in Model)
+        {
+            foreach (var produto in setor.Produtos)
+            {
+                <tr>
+                    @if (setorAtual != setor.Nome_Setor)
+                    {
+                        <td>@setor.Nome_Setor</td>
+                        setorAtual = setor.Nome_Setor;
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                    <td>@produto</td>
+                </tr>
+            }
+
+ 
+            <tr><td colspan="2"></td></tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a href="@Url.Action("Index", "Setor")" class="btn btn-info">Voltar</a>
+</div>

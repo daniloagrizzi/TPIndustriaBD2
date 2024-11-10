@@ -6,22 +6,38 @@
     <thead>
         <tr>
             <th>Grupo</th>
-            <th> Produto</th>
+            <th>Produto</th>
         </tr>
     </thead>
     <tbody>
+        @{
+            string grupoAtual = null;
+        }
+
         @foreach (var produtosGrupo in Model)
         {
             <tr>
-                <td>@produtosGrupo.Nome_Grupo</td>
+                @if (grupoAtual != produtosGrupo.Nome_Grupo)
+                {
+                    <td>@produtosGrupo.Nome_Grupo</td>
+                    grupoAtual = produtosGrupo.Nome_Grupo;
+                }
+                else
+                {
+                    <td></td>
+                }
+
                 <td>@produtosGrupo.Nome_Produto</td>
             </tr>
-        }
 
-    <td>
-        <a href="@Url.Action("Index", "Produto")" class="btn btn-info">
-            Voltar
-        </a>
-    </td>
+            @if (grupoAtual != produtosGrupo.Nome_Grupo)
+            {
+                <tr><td colspan="2"></td></tr> 
+            }
+        }
     </tbody>
 </table>
+
+<div>
+    <a href="@Url.Action("Index", "Produto")" class="btn btn-info">Voltar</a>
+</div>

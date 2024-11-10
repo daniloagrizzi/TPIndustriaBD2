@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TPIndustriaBD2.Models.Setor>
+
+@{
+    ViewData["Title"] = "Lista de Setores";
+}
+
+<h2>Lista de Setores</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome do Setor</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var setor in Model)
+        {
+            <tr>
+                <td>@setor.ID_Setor</td>
+                <td>@setor.Nome_Setor</td>
+            </tr>
+        }
+        <a asp-action="ProdutosConsumidosPorSetor" asp-controller="Setor" class="btn btn-info">
+            Produtos Consumidos Por setor
+        </a>
+    </tbody>
+</table>
