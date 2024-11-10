@@ -34,13 +34,30 @@ namespace TPIndustriaBD2.Controllers
             return View(produtosGrupo);
         }
 
+        public IActionResult ExibirMenorPrecoCompra(int id)
+        {
+            var dataAcess = new DataAcess();
+            var compraMenorPreco = dataAcess.BuscarMenorPrecoCompra(id);
+
+            if (compraMenorPreco == null)
+            {
+                ViewBag.Message = "Nenhuma compra encontrada para o produto.";
+                return View("Error");
+            }
+
+            return View("ExibirMenorPrecoCompra", compraMenorPreco);
+        }
+
+
+
         [HttpGet]
         public IActionResult RegistrarCompra()
         {
 
             var model = new RegistrarCompraVM
             {
-                Fornecedor = _dataAcess.ListarFornecedores()
+                Fornecedor = _dataAcess.ListarFornecedores(),
+                Produto = _dataAcess.ListarProdutos()
             };
 
             return View(model);
@@ -60,6 +77,31 @@ namespace TPIndustriaBD2.Controllers
 
             return RedirectToAction("RegistrarCompra");
 
+        }
+
+        [HttpGet]
+        public IActionResult RegistrarConsumo()
+        {
+            var model = new RegistrarConsumo
+            {
+                Setor = _dataAcess.ListarSetores(),
+                Produto = _dataAcess.ListarProdutos()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult InserirConsumo(RegistrarConsumo model)
+        {
+            _dataAcess.RegistrarConsumo(
+                model.ID_Produto,
+                model.FK_Setor,
+                model.Quantidade
+            );
+
+
+            return RedirectToAction("RegistrarConsumo");
         }
     }
 }

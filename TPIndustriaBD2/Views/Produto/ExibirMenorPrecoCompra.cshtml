@@ -1,0 +1,17 @@
+﻿@model TPIndustriaBD2.Models.ViewModels.CompraViewModel
+
+<h2>Menor Preço de Compra</h2>
+
+@if (Model != null)
+{
+    <p><strong>Fornecedor:</strong> @Model.NomeFornecedor</p>
+    <p><strong>Valor da Compra:</strong> @Model.ValorCompra.ToString("C")</p>
+    <p><strong>Quantidade Comprada:</strong> @Model.QuantidadeComprada</p>
+    <p><strong>Data da Compra:</strong> @Model.DiaCompra</p>
+}
+else
+{
+    <p>Nenhuma compra encontrada para este produto.</p>
+}
+
+<a asp-action="Index" asp-controller="Produto" class="btn btn-primary">Voltar para a Lista de Produtos</a>

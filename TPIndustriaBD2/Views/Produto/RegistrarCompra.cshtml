@@ -3,11 +3,15 @@
 <h2>Registrar Compra</h2>
 
 <form asp-action="InserirCompra" method="post">
-    <div class="form-group">
-        <label asp-for="ID_Produto"></label>
-        <input asp-for="ID_Produto" class="form-control" />
-        <span asp-validation-for="ID_Produto" class="text-danger"></span>
-    </div>
+    <label asp-for="ID_Produto"></label>
+    <select asp-for="ID_Produto" class="form-control">
+        <option value="">Selecione um Produto</option>
+        @foreach (var produto in Model.Produto)
+        {
+            <option value="@produto.ID_Produto">@produto.Nome_Produto</option>
+        }
+    </select>
+    <span asp-validation-for="ID_Produto" class="text-danger"></span>
 
     <div class="form-group">
         <label asp-for="ID_Fornecedor"></label>

@@ -7,6 +7,7 @@
         public int Quantidade { get; set; }
         public decimal Valor_Compra { get; set; }
         public ICollection<Fornecedor> Fornecedor { get; set; }
+        public ICollection<Produto> Produto { get; set; }
 
     }
 }

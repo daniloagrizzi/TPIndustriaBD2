@@ -1,0 +1,37 @@
+﻿@model TPIndustriaBD2.Models.ViewModels.RegistrarConsumo
+
+<h2>Registrar Consumo</h2>
+
+<form asp-action="InserirConsumo" method="post">
+    <div class="form-group">
+        <label asp-for="ID_Produto"></label>
+        <select asp-for="ID_Produto" class="form-control">
+        <option value="">Selecione um Produto</option>
+        @foreach (var produto in Model.Produto)
+        {
+            <option value="@produto.ID_Produto">@produto.Nome_Produto</option>
+        }
+        </select>
+        <span asp-validation-for="ID_Produto" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FK_Setor"></label>
+        <select asp-for="FK_Setor" class="form-control">
+            <option value="">Selecione um setor</option>
+            @foreach (var setor in Model.Setor)
+            {
+                <option value="@setor.ID_Setor">@setor.Nome_Setor</option>
+            }
+        </select>
+        <span asp-validation-for="FK_Setor" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Quantidade"></label>
+        <input asp-for="Quantidade" class="form-control" />
+        <span asp-validation-for="Quantidade" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>

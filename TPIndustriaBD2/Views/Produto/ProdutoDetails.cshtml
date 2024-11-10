@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TPIndustriaBD2.Models.ViewModels.ProdutoDetailVM>
+﻿@model TPIndustriaBD2.Models.ViewModels.ProdutoDetailVM
 
 @{
     ViewData["Title"] = "Ficha do Produto";
@@ -6,57 +6,70 @@
 
 <h1>@ViewData["Title"]</h1>
 
-@if (Model.Any())
+@if (Model != null)
 {
- 
-    <h2>@Model.First().NomeProduto</h2>
+    <h2>@Model.NomeProduto</h2>
 
     <div>
         <h3>Detalhes de Compra</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Fornecedor</th>
-                    <th>Valor Compra</th>
-                    <th>Quantidade Comprada</th>
-                    <th>Dia Compra</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        @if (Model.Compras.Any())
+        {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>@item.NomeFornecedor</td>
-                        <td>@item.ValorCompra.ToString("C")</td>
-                        <td>@item.QuantidadeComprada</td>
-                        <td>@item.DiaCompra</td>
+                        <th>Fornecedor</th>
+                        <th>Valor Compra</th>
+                        <th>Quantidade Comprada</th>
+                        <th>Dia Compra</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Compras)
+                    {
+                        <tr>
+                            <td>@item.NomeFornecedor</td>
+                            <td>@item.ValorCompra.ToString("C")</td>
+                            <td>@item.QuantidadeComprada</td>
+                            <td>@item.DiaCompra</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><strong>Não existem compras para esse produto.</strong></p>
+        }
     </div>
 
     <div>
         <h3>Detalhes de Consumo</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Valor Consumido</th>
-                    <th>Quantidade Consumida</th>
-                    <th>Dia Consumido</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        @if (Model.Consumos.Any())
+        {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>@item.ValorConsumido.ToString("C")</td>
-                        <td>@item.QuantidadeConsumida</td>
-                        <td>@item.DiaConsumido</td>
+                        <th>Valor Consumido</th>
+                        <th>Quantidade Consumida</th>
+                        <th>Dia Consumido</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Consumos)
+                    {
+                        <tr>
+                            <td>@item.ValorConsumido.ToString("C")</td>
+                            <td>@item.QuantidadeConsumida</td>
+                            <td>@item.DiaConsumido</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><strong>Não existem consumos para esse produto.</strong></p>
+        }
     </div>
 }
 else

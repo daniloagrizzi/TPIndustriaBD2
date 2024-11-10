@@ -82,18 +82,15 @@ namespace TPIndustriaBD2.Data
             return produtos;
         }
 
-
-        public List<ProdutoDetailVM> DetalharProduto(int Id)
+        public List<Setor> ListarSetores()
         {
-            List<ProdutoDetailVM> produtoDetails = new List<ProdutoDetailVM>();
+            List<Setor> setores = new List<Setor>();
 
             using (_connection = new SqlConnection(GetConnectionString()))
             {
                 _command = _connection.CreateCommand();
                 _command.CommandType = System.Data.CommandType.StoredProcedure;
-                _command.CommandText = "[dbo].[FichaProduto]";
-
-                _command.Parameters.AddWithValue("@ID_Produto", Id);
+                _command.CommandText = "[DBO].[ListarSetores ]";
 
                 _connection.Open();
 
@@ -101,33 +98,84 @@ namespace TPIndustriaBD2.Data
 
                 while (reader.Read())
                 {
-                    ProdutoDetailVM produtoDetail = new ProdutoDetailVM();
-                    produtoDetail.NomeProduto = reader["Produto"] != DBNull.Value ? reader["Produto"].ToString() : null;
-                    produtoDetail.NomeFornecedor = reader["Fornecedor"] != DBNull.Value ? reader["Fornecedor"].ToString() : null;
-                    produtoDetail.ValorConsumido = reader["ValorConsumido"] != DBNull.Value ? Convert.ToDecimal(reader["ValorConsumido"]) : 0;
-                    produtoDetail.ValorCompra = reader["ValorCompra"] != DBNull.Value ? Convert.ToDecimal(reader["ValorCompra"]) : 0;
-
-                    produtoDetail.DiaConsumido = reader["DiaConsumido"] != DBNull.Value ? reader["DiaConsumido"].ToString() : null;
-                    produtoDetail.DiaCompra = reader["DiaCompra"] != DBNull.Value ? reader["DiaCompra"].ToString() : null;
-
-                    produtoDetail.QuantidadeConsumida = reader["QuantidadeConsumida"] != DBNull.Value ? Convert.ToInt32(reader["QuantidadeConsumida"]) : 0;
-                    produtoDetail.QuantidadeComprada = reader["QuantidadeComprada"] != DBNull.Value ? Convert.ToInt32(reader["QuantidadeComprada"]) : 0;
-
-                    produtoDetails.Add(produtoDetail);
+                    Setor setor = new Setor();
+                    setor.ID_Setor = Convert.ToInt32(reader["ID_Setor"]);
+                    setor.Nome_Setor = reader["Nome_Setor"].ToString();
+                    setores.Add(setor);
                 }
             }
 
-            if (produtoDetails.Count == 0)
-            {
-                Console.WriteLine("Nenhum detalhe de produto encontrado.");
-            }
-
-            return produtoDetails;
+            return setores;
         }
 
 
+        public ProdutoDetailVM DetalharProduto(int idProduto)
+        {
+            ProdutoDetailVM produtoDetailVM = new ProdutoDetailVM();
 
+            try
+            {
+                using (_connection = new SqlConnection(GetConnectionString()))
+                {
+                    _connection.Open();
 
+                    using (_command = new SqlCommand("[dbo].[BuscarCompras]", _connection))
+                    {
+                        _command.CommandType = System.Data.CommandType.StoredProcedure;
+                        _command.Parameters.AddWithValue("@ID_Produto", idProduto);
+
+                        SqlDataReader readerCompras = _command.ExecuteReader();
+                        while (readerCompras.Read())
+                        {
+                            CompraViewModel compra = new CompraViewModel
+                            {
+                                NomeFornecedor = readerCompras["Nome_Fornecedor"].ToString(),
+                                ValorCompra = readerCompras["Valor_Compra"] != DBNull.Value ? Convert.ToDecimal(readerCompras["Valor_Compra"]) : 0,
+                                QuantidadeComprada = readerCompras["Quantidade"] != DBNull.Value ? Convert.ToInt32(readerCompras["Quantidade"]) : 0,
+                                DiaCompra = readerCompras["Data_Compra"] != DBNull.Value ? readerCompras["Data_Compra"].ToString() : "Data não disponível"
+                            };
+                            produtoDetailVM.Compras.Add(compra);
+                        }
+                        readerCompras.Close();
+                    }
+
+                    using (_command = new SqlCommand("[dbo].[BuscarConsumos]", _connection))
+                    {
+                        _command.CommandType = System.Data.CommandType.StoredProcedure;
+                        _command.Parameters.AddWithValue("@ID_Produto", idProduto);
+
+                        SqlDataReader readerConsumos = _command.ExecuteReader();
+                        while (readerConsumos.Read())
+                        {
+                            ConsumoViewModel consumo = new ConsumoViewModel
+                            {
+                                ValorConsumido = readerConsumos["ValorUnitario"] != DBNull.Value ? Convert.ToDecimal(readerConsumos["ValorUnitario"]) : 0,
+                                QuantidadeConsumida = readerConsumos["Quantidade"] != DBNull.Value ? Convert.ToInt32(readerConsumos["Quantidade"]) : 0,
+                                DiaConsumido = readerConsumos["Data_Consumo"] != DBNull.Value ? Convert.ToDateTime(readerConsumos["Data_Consumo"]).ToString("dd/MM/yyyy") : "Data não disponível"
+                            };
+                            produtoDetailVM.Consumos.Add(consumo);
+                        }
+                        readerConsumos.Close();
+                    }
+                    using (_command = new SqlCommand("SELECT Nome_Produto FROM Produto WHERE ID_Produto = @ID_Produto", _connection))
+                    {
+                        _command.Parameters.AddWithValue("@ID_Produto", idProduto);
+                        produtoDetailVM.NomeProduto = _command.ExecuteScalar()?.ToString();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Erro SQL: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+               
+            }
+
+            return produtoDetailVM;
+        }
 
 
         public List<FornecedoresEnderecosVM> ListarFornecedoresEnderecos()
@@ -147,7 +195,6 @@ namespace TPIndustriaBD2.Data
                 while (reader.Read())
                 {
                     FornecedoresEnderecosVM fornecedorEndereco = new FornecedoresEnderecosVM();
-                    fornecedorEndereco.ID_Fornecedor = Convert.ToInt32(reader["ID_Fornecedor"]);
                     fornecedorEndereco.Nome_Fornecedor = reader["Nome_Fornecedor"].ToString();
                     fornecedorEndereco.CNPJ = reader["CNPJ"].ToString();
                     fornecedorEndereco.Contato = reader["Contato"].ToString();
@@ -208,6 +255,55 @@ namespace TPIndustriaBD2.Data
                 command.ExecuteNonQuery();
             }
         }
+
+        public void RegistrarConsumo(int idProduto, int fK_Setor, int quantidade)
+        {
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                SqlCommand command = new SqlCommand("RegistrarConsumo", _connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@ID_Produto", idProduto);
+                command.Parameters.AddWithValue("@FK_Setor", fK_Setor);
+                command.Parameters.AddWithValue("@Quantidade", quantidade);
+                _connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public CompraViewModel BuscarMenorPrecoCompra(int idProduto)
+        {
+            CompraViewModel compraMenorPreco = null;
+
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                _command = _connection.CreateCommand();
+                _command.CommandType = System.Data.CommandType.StoredProcedure;
+                _command.CommandText = "[dbo].[BuscarMenorPrecoCompra]";
+                _command.Parameters.AddWithValue("@ID_Produto", idProduto);
+
+                _connection.Open();
+
+                SqlDataReader reader = _command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    compraMenorPreco = new CompraViewModel
+                    {
+                        NomeFornecedor = reader["Nome_Fornecedor"] !=  DBNull.Value ?  reader["Nome_Fornecedor"].ToString() : "Fornecedor não disponível",
+                        ValorCompra = reader["Valor_Compra"] != DBNull.Value ? Convert.ToDecimal(reader["Valor_Compra"]) : 0,
+                        QuantidadeComprada = reader["Quantidade"] != DBNull.Value ? Convert.ToInt32(reader["Quantidade"]) : 0,
+                        DiaCompra = reader["Data_Compra"] != DBNull.Value ? Convert.ToDateTime(reader["Data_Compra"]).ToString("dd/MM/yyyy") : "Data não disponível"
+                    };
+                }
+                reader.Close();
+            }
+
+            return compraMenorPreco;
+        }
+
+
     }
 }
 
