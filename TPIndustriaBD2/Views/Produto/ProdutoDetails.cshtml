@@ -49,6 +49,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Setor</th>
                         <th>Valor Consumido</th>
                         <th>Quantidade Consumida</th>
                         <th>Dia Consumido</th>
@@ -58,6 +59,7 @@
                     @foreach (var item in Model.Consumos)
                     {
                         <tr>
+                            <td>@item.Nome_Setor.ToString()</td>
                             <td>@item.ValorConsumido.ToString("C")</td>
                             <td>@item.QuantidadeConsumida</td>
                             <td>@item.DiaConsumido</td>

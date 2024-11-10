@@ -5,5 +5,7 @@
         public decimal ValorConsumido { get; set; }
         public int QuantidadeConsumida { get; set; }
         public string DiaConsumido { get; set; }
+
+       public string Nome_Setor { get; set; }
     }
 }

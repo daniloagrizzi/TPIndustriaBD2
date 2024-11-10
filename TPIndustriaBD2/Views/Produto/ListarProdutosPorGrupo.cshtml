@@ -5,20 +5,16 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Nome do Produto</th>
             <th>Grupo</th>
-            <th>Preço Médio</th>
-            <th>Saldo</th>
+            <th> Produto</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var produtosGrupo in Model)
         {
             <tr>
-                <td>@produtosGrupo.Nome_Produto</td>
                 <td>@produtosGrupo.Nome_Grupo</td>
-                <td>@produtosGrupo.Preco_Medio.ToString("C")</td>
-                <td>@produtosGrupo.Saldo.ToString()</td>
+                <td>@produtosGrupo.Nome_Produto</td>
             </tr>
         }
 

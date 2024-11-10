@@ -151,7 +151,8 @@ namespace TPIndustriaBD2.Data
                             {
                                 ValorConsumido = readerConsumos["ValorUnitario"] != DBNull.Value ? Convert.ToDecimal(readerConsumos["ValorUnitario"]) : 0,
                                 QuantidadeConsumida = readerConsumos["Quantidade"] != DBNull.Value ? Convert.ToInt32(readerConsumos["Quantidade"]) : 0,
-                                DiaConsumido = readerConsumos["Data_Consumo"] != DBNull.Value ? Convert.ToDateTime(readerConsumos["Data_Consumo"]).ToString("dd/MM/yyyy") : "Data não disponível"
+                                DiaConsumido = readerConsumos["Data_Consumo"] != DBNull.Value ? Convert.ToDateTime(readerConsumos["Data_Consumo"]).ToString("dd/MM/yyyy") : "Data não disponível",
+                                Nome_Setor = readerConsumos["Nome_Setor"] != DBNull.Value ? readerConsumos["Nome_Setor"].ToString() : "Setor não disponível"
                             };
                             produtoDetailVM.Consumos.Add(consumo);
                         }
@@ -227,11 +228,8 @@ namespace TPIndustriaBD2.Data
                 while (reader.Read())
                 {
                     ListarProdutosGruposVM listarProdutosGrupo = new ListarProdutosGruposVM();
-                    listarProdutosGrupo.Nome_Produto = reader["Produto"].ToString();
-                    listarProdutosGrupo.Nome_Grupo = reader["Grupo"].ToString();
-                    listarProdutosGrupo.Preco_Medio = Convert.ToDecimal(reader["Preco_Medio"]); ;
-                    listarProdutosGrupo.Saldo = Convert.ToInt32(reader["Saldo"]);
-
+                    listarProdutosGrupo.Nome_Produto = reader["Nome_Produto"].ToString();
+                    listarProdutosGrupo.Nome_Grupo = reader["Nome_Grupo"].ToString();
                     listarProdutosGrupos.Add(listarProdutosGrupo);
                 }
             }
