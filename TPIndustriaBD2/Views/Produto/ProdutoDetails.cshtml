@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TPIndustriaBD2.Models.ViewModels.ProdutoDetailVM>
+
+@{
+    ViewData["Title"] = "Ficha do Produto";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Any())
+{
+ 
+    <h2>@Model.First().NomeProduto</h2>
+
+    <div>
+        <h3>Detalhes de Compra</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Fornecedor</th>
+                    <th>Valor Compra</th>
+                    <th>Quantidade Comprada</th>
+                    <th>Dia Compra</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.NomeFornecedor</td>
+                        <td>@item.ValorCompra.ToString("C")</td>
+                        <td>@item.QuantidadeComprada</td>
+                        <td>@item.DiaCompra</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h3>Detalhes de Consumo</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Valor Consumido</th>
+                    <th>Quantidade Consumida</th>
+                    <th>Dia Consumido</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ValorConsumido.ToString("C")</td>
+                        <td>@item.QuantidadeConsumida</td>
+                        <td>@item.DiaConsumido</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Nenhum detalhe de produto encontrado.</p>
+}

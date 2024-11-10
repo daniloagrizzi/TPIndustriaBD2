@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Reflection;
 using TPIndustriaBD2.Data;
+using TPIndustriaBD2.Models;
 using TPIndustriaBD2.Models.ViewModels;
 
 namespace TPIndustriaBD2.Controllers
@@ -18,6 +19,19 @@ namespace TPIndustriaBD2.Controllers
         {
             var produtos = _dataAcess.ListarProdutos();
             return View(produtos);
+        }
+
+        public IActionResult ProdutoDetails(int Id) {
+
+            var produtosDetails = _dataAcess.DetalharProduto(Id);
+
+            return View(produtosDetails);
+        }
+
+        public IActionResult ListarProdutosPorGrupo()
+        {
+            var produtosGrupo = _dataAcess.ListarProdutosGrupos();
+            return View(produtosGrupo);
         }
 
         [HttpGet]

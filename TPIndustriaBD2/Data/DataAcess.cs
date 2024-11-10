@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using TPIndustriaBD2.Models;
 using TPIndustriaBD2.Models.ViewModels;
 using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography.X509Certificates;
 
 namespace TPIndustriaBD2.Data
 {
@@ -69,9 +70,10 @@ namespace TPIndustriaBD2.Data
                 while (reader.Read())
                 {
                     Produto produto = new Produto();
+                    produto.ID_Produto = Convert.ToInt32(reader["ID_Produto"]);
                     produto.Nome_Produto = reader["Nome_Produto"].ToString();
-                    produto.Preco_medio = Convert.ToDecimal(reader["Preco_Medio"]);            
-                   produto.Saldo = Convert.ToInt32(reader["Saldo"]);
+                    produto.Preco_medio = Convert.ToDecimal(reader["Preco_Medio"]);
+                    produto.Saldo = Convert.ToInt32(reader["Saldo"]);
 
                     produtos.Add(produto);
                 }
@@ -80,8 +82,55 @@ namespace TPIndustriaBD2.Data
             return produtos;
         }
 
-    
-    public List<FornecedoresEnderecosVM> ListarFornecedoresEnderecos()
+
+        public List<ProdutoDetailVM> DetalharProduto(int Id)
+        {
+            List<ProdutoDetailVM> produtoDetails = new List<ProdutoDetailVM>();
+
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                _command = _connection.CreateCommand();
+                _command.CommandType = System.Data.CommandType.StoredProcedure;
+                _command.CommandText = "[dbo].[FichaProduto]";
+
+                _command.Parameters.AddWithValue("@ID_Produto", Id);
+
+                _connection.Open();
+
+                SqlDataReader reader = _command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    ProdutoDetailVM produtoDetail = new ProdutoDetailVM();
+                    produtoDetail.NomeProduto = reader["Produto"] != DBNull.Value ? reader["Produto"].ToString() : null;
+                    produtoDetail.NomeFornecedor = reader["Fornecedor"] != DBNull.Value ? reader["Fornecedor"].ToString() : null;
+                    produtoDetail.ValorConsumido = reader["ValorConsumido"] != DBNull.Value ? Convert.ToDecimal(reader["ValorConsumido"]) : 0;
+                    produtoDetail.ValorCompra = reader["ValorCompra"] != DBNull.Value ? Convert.ToDecimal(reader["ValorCompra"]) : 0;
+
+                    produtoDetail.DiaConsumido = reader["DiaConsumido"] != DBNull.Value ? reader["DiaConsumido"].ToString() : null;
+                    produtoDetail.DiaCompra = reader["DiaCompra"] != DBNull.Value ? reader["DiaCompra"].ToString() : null;
+
+                    produtoDetail.QuantidadeConsumida = reader["QuantidadeConsumida"] != DBNull.Value ? Convert.ToInt32(reader["QuantidadeConsumida"]) : 0;
+                    produtoDetail.QuantidadeComprada = reader["QuantidadeComprada"] != DBNull.Value ? Convert.ToInt32(reader["QuantidadeComprada"]) : 0;
+
+                    produtoDetails.Add(produtoDetail);
+                }
+            }
+
+            if (produtoDetails.Count == 0)
+            {
+                Console.WriteLine("Nenhum detalhe de produto encontrado.");
+            }
+
+            return produtoDetails;
+        }
+
+
+
+
+
+
+        public List<FornecedoresEnderecosVM> ListarFornecedoresEnderecos()
         {
             List<FornecedoresEnderecosVM> fornecedoresEnderecos = new List<FornecedoresEnderecosVM>();
 
@@ -111,6 +160,36 @@ namespace TPIndustriaBD2.Data
             }
 
             return fornecedoresEnderecos;
+        }
+
+
+        public List<ListarProdutosGruposVM> ListarProdutosGrupos()
+        {
+            List<ListarProdutosGruposVM> listarProdutosGrupos = new List<ListarProdutosGruposVM>();
+
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                _command = _connection.CreateCommand();
+                _command.CommandType = System.Data.CommandType.Text;
+                _command.CommandText = "Select * From ProdutosPorGrupo";
+
+                _connection.Open();
+
+                SqlDataReader reader = _command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    ListarProdutosGruposVM listarProdutosGrupo = new ListarProdutosGruposVM();
+                    listarProdutosGrupo.Nome_Produto = reader["Produto"].ToString();
+                    listarProdutosGrupo.Nome_Grupo = reader["Grupo"].ToString();
+                    listarProdutosGrupo.Preco_Medio = Convert.ToDecimal(reader["Preco_Medio"]); ;
+                    listarProdutosGrupo.Saldo = Convert.ToInt32(reader["Saldo"]);
+
+                    listarProdutosGrupos.Add(listarProdutosGrupo);
+                }
+            }
+
+            return listarProdutosGrupos;
         }
 
         public void RegistrarCompra(int idProduto, int idFornecedor, int quantidade, decimal valorCompra)

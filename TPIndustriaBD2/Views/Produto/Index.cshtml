@@ -19,12 +19,17 @@
                 <td>@produto.Preco_medio.ToString("C")</td>
                 <td>@produto.Saldo</td>
                 <td>
-                    <!-- Botão para visualizar os detalhes do produto -->
-                    <a href="@Url.Action("Detalhes", "Produto", new { id = produto.ID_Produto })" class="btn btn-info">
+                    <a asp-action="ProdutoDetails" asp-controller="Produto" asp-route-id="@produto.ID_Produto" class="btn btn-info">
                         Visualizar Detalhes
                     </a>
+
+
+
                 </td>
             </tr>
         }
+        <a href="@Url.Action("ListarProdutosPorGrupo", "Produto")" class="btn btn-info">
+            Ver Grupos
+        </a>
     </tbody>
 </table>
