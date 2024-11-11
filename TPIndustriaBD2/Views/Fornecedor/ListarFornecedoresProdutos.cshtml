@@ -1,0 +1,43 @@
+﻿@model List<TPIndustriaBD2.Models.ViewModels.ListarFornecedoresProdutosVM>
+
+<h2>Fornecedores de Cada Produto</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Fornecedor</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string produtoAtual = null;
+        }
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (produtoAtual != item.Produto)
+                {
+                    <td>@item.Produto</td>
+                    produtoAtual = item.Produto;
+                }
+                else
+                {
+                    <td></td>
+                }
+
+                <td>@item.Fornecedor</td>
+            </tr>
+
+            @if (produtoAtual != item.Produto)
+            {
+                <tr><td colspan="2"></td></tr> 
+            }
+        }
+    </tbody>
+</table>
+
+<div>
+    <a href="@Url.Action("Index", "Fornecedor")" class="btn btn-info">Voltar</a>
+</div>

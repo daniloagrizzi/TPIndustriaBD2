@@ -20,17 +20,17 @@
                 <td>@produto.Saldo</td>
                 <td>
                     <a asp-action="ProdutoDetails" asp-controller="Produto" asp-route-id="@produto.ID_Produto" class="btn btn-info">
-                        Visualizar Detalhes
+                        Ficha Produto
                     </a>
 
                     <a asp-action="ExibirMenorPrecoCompra" asp-controller="Produto" asp-route-id="@produto.ID_Produto" class="btn btn-info">
-                        Menor Preço Compra
+                        Menor Preço de Compra
                     </a>
                 </td>
             </tr>
         }
-        <a href="@Url.Action("ListarProdutosPorGrupo", "Produto")" class="btn btn-info">
-            Ver Grupos
-        </a>
     </tbody>
+    <a asp-action="ListarProdutosPorGrupo" asp-controller="Produto" class="btn btn-info">
+        Ver Grupos de Produtos
+    </a>
 </table>

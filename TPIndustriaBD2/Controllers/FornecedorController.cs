@@ -19,5 +19,12 @@ namespace TPIndustriaBD2.Controllers
             var fornecedoresEnderecos = _dataAcess.ListarFornecedoresEnderecos();
             return View(fornecedoresEnderecos);
         }
+
+        public IActionResult ListarFornecedoresProdutos()
+        {
+            var fornecedoresProdutos = _dataAcess.ListarFornecedoresProdutos();
+            return View(fornecedoresProdutos);
+        }
+
     }
 }

@@ -268,6 +268,33 @@ namespace TPIndustriaBD2.Data
             return listarProdutosGrupos;
         }
 
+        public List<ListarFornecedoresProdutosVM> ListarFornecedoresProdutos()
+        {
+            List<ListarFornecedoresProdutosVM> listarFornecedoresProdutos = new List<ListarFornecedoresProdutosVM>();
+
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                _command = _connection.CreateCommand();
+                _command.CommandType = System.Data.CommandType.Text;
+                _command.CommandText = "SELECT * FROM FornecedoresDeCadaPorduto";
+
+                _connection.Open();
+
+                SqlDataReader reader = _command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    ListarFornecedoresProdutosVM fornecedorProduto = new ListarFornecedoresProdutosVM();
+                    fornecedorProduto.Fornecedor = reader["Fornecedor"].ToString();
+                    fornecedorProduto.Produto = reader["Produto"].ToString();
+                    listarFornecedoresProdutos.Add(fornecedorProduto);
+                }
+            }
+
+            return listarFornecedoresProdutos;
+        }
+
+
         public void RegistrarCompra(int idProduto, int idFornecedor, int quantidade, decimal valorCompra)
         {
             using (_connection = new SqlConnection(GetConnectionString()))
