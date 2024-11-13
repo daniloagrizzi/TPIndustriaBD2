@@ -1,0 +1,39 @@
+﻿@model List<TPIndustriaBD2.Models.ViewModels.ConsumoPorSetorEspecificoVM>
+
+    @if (Model != null)
+    {
+    string nomeSetor = string.Empty;
+        var setores = Model.ToList();
+        var titulo = setores.FirstOrDefault();
+         nomeSetor = titulo.NomeSetor;
+    <h2> Consumo do setor: @nomeSetor </h2>
+    }
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Valor Total Consumido</th>
+                <th>Data de Consumo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var consumo in Model)
+            {
+                <tr>
+                    <td>@consumo.NomeProduto</td>
+                    <td>@consumo.ValorTotalConsumido.ToString("C")</td>
+                    <td>@consumo.DataConsumo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nenhum consumo encontrado para este setor.</p>
+}
+
+<a asp-action="Index" asp-controller="Setor" class="btn btn-primary">Voltar para a Lista de Setores</a>

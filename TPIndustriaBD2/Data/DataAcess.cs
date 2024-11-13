@@ -385,6 +385,41 @@ namespace TPIndustriaBD2.Data
             return compraMenorPreco;
         }
 
+        public List<ConsumoPorSetorEspecificoVM> BuscarConsumosPorSetorEspecifico(int idSetor)
+        {
+            List<ConsumoPorSetorEspecificoVM> consumosPorSetor = new List<ConsumoPorSetorEspecificoVM>();
+
+            using (_connection = new SqlConnection(GetConnectionString()))
+            {
+                _command = _connection.CreateCommand();
+                _command.CommandType = System.Data.CommandType.StoredProcedure;
+                _command.CommandText = "[dbo].[VerConsumosPorSetorEspecifico]";
+                _command.Parameters.AddWithValue("@ID_Setor", idSetor);
+
+                _connection.Open();
+
+                SqlDataReader reader = _command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var consumo = new ConsumoPorSetorEspecificoVM
+                    {
+                        NomeSetor = reader["Nome_Setor"] != DBNull.Value ? reader["Nome_Setor"].ToString() : "Setor não disponível",
+                        NomeProduto = reader["Nome_Produto"] != DBNull.Value ? reader["Nome_Produto"].ToString() : "Produto não disponível",
+                        ValorTotalConsumido = reader["Valor_Total_Consumido"] != DBNull.Value ? Convert.ToDecimal(reader["Valor_Total_Consumido"]) : 0,
+                        DataConsumo = reader["Data_Consumo"] != DBNull.Value ? Convert.ToDateTime(reader["Data_Consumo"]).ToString("dd/MM/yyyy") : "Data não disponível"
+                    };
+
+                    consumosPorSetor.Add(consumo);
+                }
+
+                reader.Close();
+            }
+
+            return consumosPorSetor;
+        }
+
+
 
     }
 }

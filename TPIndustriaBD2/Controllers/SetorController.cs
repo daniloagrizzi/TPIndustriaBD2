@@ -23,5 +23,14 @@ namespace TPIndustriaBD2.Controllers
             var setoresComProdutos = _dataAcess.ListarProdutosConsumidosPorSetor();
             return View(setoresComProdutos);
         }
+
+        [HttpGet]
+        public IActionResult ExibirConsumosPorSetorEspecifico(int id)
+        { 
+            var consumosPorSetor = _dataAcess.BuscarConsumosPorSetorEspecifico(id);
+
+            return View("ExibirConsumosPorSetorEspecifico", consumosPorSetor);
+        }
+
     }
 }

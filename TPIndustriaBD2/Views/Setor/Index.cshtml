@@ -19,6 +19,11 @@
             <tr>
                 <td>@setor.ID_Setor</td>
                 <td>@setor.Nome_Setor</td>
+                <td>
+                    <a asp-action="ExibirConsumosPorSetorEspecifico" asp-controller="Setor" asp-route-id="@setor.ID_Setor" class="btn btn-info">
+                        Ver consumo desse setor
+                    </a>
+                </td>
             </tr>
         }
     </tbody>
