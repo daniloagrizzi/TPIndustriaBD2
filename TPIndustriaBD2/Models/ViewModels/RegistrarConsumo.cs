@@ -8,5 +8,6 @@
 
         public ICollection<Setor> Setor { get; set; }
         public ICollection<Produto> Produto { get; set; }
+        public string mensagemErro { get; set; }
     }
 }

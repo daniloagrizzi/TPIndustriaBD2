@@ -2,8 +2,8 @@
 
 <h2>Registrar Compra</h2>
 
-<form asp-action="InserirCompra" method="post">
-    <label asp-for="ID_Produto"></label>
+<form id="formRegistrarCompra" asp-action="InserirCompra" method="post">
+    <label asp-for="ID_Produto">Produto</label>
     <select asp-for="ID_Produto" class="form-control">
         <option value="">Selecione um Produto</option>
         @foreach (var produto in Model.Produto)
@@ -14,12 +14,12 @@
     <span asp-validation-for="ID_Produto" class="text-danger"></span>
 
     <div class="form-group">
-        <label asp-for="ID_Fornecedor"></label>
+        <label asp-for="ID_Fornecedor">Fornecedor</label>
         <select asp-for="ID_Fornecedor" class="form-control">
             <option value="">Selecione um fornecedor</option>
             @foreach (var fornecedor in Model.Fornecedor)
             {
-                        <option value="@fornecedor.ID_Fornecedor">@fornecedor.Nome_Fornecedor</option>
+                <option value="@fornecedor.ID_Fornecedor">@fornecedor.Nome_Fornecedor</option>
             }
         </select>
         <span asp-validation-for="ID_Fornecedor" class="text-danger"></span>
@@ -32,7 +32,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Valor_Compra"></label>
+        <label asp-for="Valor_Compra">Valor da compra</label>
         <input asp-for="Valor_Compra" class="form-control" />
         <span asp-validation-for="Valor_Compra" class="text-danger"></span>
     </div>
@@ -40,4 +40,31 @@
     <button type="submit" class="btn btn-primary">Salvar</button>
 </form>
 
+<!-- Modal de Erro -->
+<div class="modal fade" id="erroModal" tabindex="-1" aria-labelledby="erroModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="erroModalLabel">Erro ao Registrar Compra</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                @Model.mensagemErro
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var mensagemErro = '@Model.mensagemErro';
+            if (mensagemErro && mensagemErro.length > 0) {
+                $('#erroModal').modal('show');
+            }
+        });
+    </script>
+}

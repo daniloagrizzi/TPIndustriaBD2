@@ -250,7 +250,7 @@ namespace TPIndustriaBD2.Data
             {
                 _command = _connection.CreateCommand();
                 _command.CommandType = System.Data.CommandType.Text;
-                _command.CommandText = "Select * From ProdutosPorGrupo";
+                _command.CommandText = "Select * From ListarProdutosPorGrupo";
 
                 _connection.Open();
 
@@ -297,34 +297,60 @@ namespace TPIndustriaBD2.Data
 
         public void RegistrarCompra(int idProduto, int idFornecedor, int quantidade, decimal valorCompra)
         {
-            using (_connection = new SqlConnection(GetConnectionString()))
+
+            try
             {
-                SqlCommand command = new SqlCommand("RegistrarCompra", _connection);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                using (_connection = new SqlConnection(GetConnectionString()))
+                {
+                    using (SqlCommand command = new SqlCommand("RegistrarCompra", _connection))
+                    {
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
 
-                command.Parameters.AddWithValue("@ID_Produto", idProduto);
-                command.Parameters.AddWithValue("@ID_Fornecedor", idFornecedor);
-                command.Parameters.AddWithValue("@Quantidade", quantidade);
-                command.Parameters.AddWithValue("@Valor_Compra", valorCompra);
-                _connection.Open();
+                        command.Parameters.AddWithValue("@ID_Produto", idProduto);
+                        command.Parameters.AddWithValue("@ID_Fornecedor", idFornecedor);
+                        command.Parameters.AddWithValue("@Quantidade", quantidade);
+                        command.Parameters.AddWithValue("@Valor_Compra", valorCompra);
 
-                command.ExecuteNonQuery();
+                        _connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+              throw new Exception(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception( ex.Message); 
             }
         }
 
+
         public void RegistrarConsumo(int idProduto, int fK_Setor, int quantidade)
         {
-            using (_connection = new SqlConnection(GetConnectionString()))
+            try
             {
-                SqlCommand command = new SqlCommand("RegistrarConsumo", _connection);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                using (_connection = new SqlConnection(GetConnectionString()))
+                {
+                    SqlCommand command = new SqlCommand("RegistrarConsumo", _connection);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
 
-                command.Parameters.AddWithValue("@ID_Produto", idProduto);
-                command.Parameters.AddWithValue("@FK_Setor", fK_Setor);
-                command.Parameters.AddWithValue("@Quantidade", quantidade);
-                _connection.Open();
+                    command.Parameters.AddWithValue("@ID_Produto", idProduto);
+                    command.Parameters.AddWithValue("@FK_Setor", fK_Setor);
+                    command.Parameters.AddWithValue("@Quantidade", quantidade);
+                    _connection.Open();
 
-                command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception( ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 

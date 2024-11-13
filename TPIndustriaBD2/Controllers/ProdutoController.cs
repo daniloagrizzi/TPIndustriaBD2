@@ -21,7 +21,8 @@ namespace TPIndustriaBD2.Controllers
             return View(produtos);
         }
 
-        public IActionResult ProdutoDetails(int Id) {
+        public IActionResult ProdutoDetails(int Id)
+        {
 
             var produtosDetails = _dataAcess.DetalharProduto(Id);
 
@@ -63,21 +64,37 @@ namespace TPIndustriaBD2.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         public IActionResult InserirCompra(RegistrarCompraVM model)
         {
+            try
+            {
+                _dataAcess.RegistrarCompra(
+                    model.ID_Produto,
+                    model.ID_Fornecedor,
+                    model.Quantidade,
+                    model.Valor_Compra
+                );
+                return RedirectToAction("Index", "Produto");
 
-            _dataAcess.RegistrarCompra(
-                model.ID_Produto,
-                model.ID_Fornecedor,
-                model.Quantidade,
-                model.Valor_Compra
-            );
+            }
+            catch (SqlException ex)
+            {
+                model.mensagemErro =  ex.Message;
+                model.Produto = _dataAcess.ListarProdutos();
+                model.Fornecedor = _dataAcess.ListarFornecedores();
+                return View("RegistrarCompra", model);
+            }
+            catch (Exception ex)
+            {
 
-            return RedirectToAction("RegistrarCompra");
-
+                model.mensagemErro =  ex.Message;
+                model.Produto = _dataAcess.ListarProdutos();
+                model.Fornecedor = _dataAcess.ListarFornecedores();
+                return View("RegistrarCompra", model);
+            }
         }
+
 
         [HttpGet]
         public IActionResult RegistrarConsumo()
@@ -94,14 +111,34 @@ namespace TPIndustriaBD2.Controllers
         [HttpPost]
         public IActionResult InserirConsumo(RegistrarConsumo model)
         {
-            _dataAcess.RegistrarConsumo(
+            try
+            {
+                _dataAcess.RegistrarConsumo(
                 model.ID_Produto,
                 model.FK_Setor,
                 model.Quantidade
             );
+                return RedirectToAction("Index", "Produto");
+            }
+            catch (SqlException ex)
+            {
 
+                model.mensagemErro = ex.Message;
+                model.Setor = _dataAcess.ListarSetores();
+                model.Produto = _dataAcess.ListarProdutos();
+                return View("RegistrarConsumo", model);
+            }
 
-            return RedirectToAction("RegistrarConsumo");
+            catch (Exception ex)
+            {
+
+                model.mensagemErro = ex.Message;
+                model.Setor = _dataAcess.ListarSetores();
+                model.Produto = _dataAcess.ListarProdutos();
+                return View("RegistrarConsumo", model);
+            }
+
         }
     }
 }
+

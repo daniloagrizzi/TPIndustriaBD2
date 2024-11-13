@@ -9,5 +9,6 @@
         public ICollection<Fornecedor> Fornecedor { get; set; }
         public ICollection<Produto> Produto { get; set; }
 
+        public string mensagemErro { get; set; }
     }
 }
