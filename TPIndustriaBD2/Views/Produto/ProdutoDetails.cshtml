@@ -1,26 +1,23 @@
 ﻿@model TPIndustriaBD2.Models.ViewModels.ProdutoDetailVM
 
-@{
-    ViewData["Title"] = "Ficha do Produto";
-}
+<h1><i class="fas fa-file-alt"></i> @Model.NomeProduto</h1>
 
-<h1>@ViewData["Title"]</h1>
 
 @if (Model != null)
 {
-    <h2>@Model.NomeProduto</h2>
 
+    <!-- Detalhes de Compra -->
     <div>
-        <h3>Detalhes de Compra</h3>
+        <h3><i class="fas fa-shopping-cart"></i> <strong>Detalhes de Compra</strong></h3>
         @if (Model.Compras.Any())
         {
-            <table class="table">
-                <thead>
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
                     <tr>
-                        <th>Fornecedor</th>
-                        <th>Valor Compra</th>
-                        <th>Quantidade Comprada</th>
-                        <th>Dia Compra</th>
+                        <th><i class="fas fa-truck"></i> Fornecedor</th>
+                        <th><i class="fas fa-dollar-sign"></i> Valor Compra</th>
+                        <th><i class="fas fa-sort-numeric-up"></i> Quantidade</th>
+                        <th><i class="fas fa-calendar-alt"></i> Data</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,7 +27,7 @@
                             <td>@item.NomeFornecedor</td>
                             <td>@item.ValorCompra.ToString("C")</td>
                             <td>@item.QuantidadeComprada</td>
-                            <td>@item.DiaCompra</td>
+                            <td>@item.DiaCompra.ToString()</td>
                         </tr>
                     }
                 </tbody>
@@ -38,31 +35,32 @@
         }
         else
         {
-            <p><strong>Não existem compras para esse produto.</strong></p>
+            <p><i class="fas fa-exclamation-circle"></i> Não existem compras para esse produto.</p>
         }
     </div>
 
-    <div>
-        <h3>Detalhes de Consumo</h3>
+    <!-- Detalhes de Consumo -->
+    <div class="mt-4">
+        <h3><i class="fas fa-industry"></i> <strong>Detalhes de Consumo</strong></h3>
         @if (Model.Consumos.Any())
         {
-            <table class="table">
-                <thead>
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
                     <tr>
-                        <th>Setor</th>
-                        <th>Valor Consumido</th>
-                        <th>Quantidade Consumida</th>
-                        <th>Dia Consumido</th>
+                        <th><i class="fas fa-warehouse"></i> Setor</th>
+                        <th><i class="fas fa-dollar-sign"></i> Valor Consumido</th>
+                        <th><i class="fas fa-sort-numeric-up"></i> Quantidade</th>
+                        <th><i class="fas fa-calendar-alt"></i> Data</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Consumos)
                     {
                         <tr>
-                            <td>@item.Nome_Setor.ToString()</td>
+                            <td>@item.Nome_Setor</td>
                             <td>@item.ValorConsumido.ToString("C")</td>
                             <td>@item.QuantidadeConsumida</td>
-                            <td>@item.DiaConsumido</td>
+                            <td>@item.DiaConsumido.ToString()</td>
                         </tr>
                     }
                 </tbody>
@@ -70,13 +68,20 @@
         }
         else
         {
-            <p><strong>Não existem consumos para esse produto.</strong></p>
+            <p><i class="fas fa-exclamation-circle"></i> Não existem consumos para esse produto.</p>
         }
+    </div>
+
+    <!-- Ações -->
+    <div class="mt-4">
+        <a asp-action="Index" asp-controller="Produto" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Voltar para a Lista de Produtos
+        </a>
     </div>
 }
 else
 {
-    <p>Nenhum detalhe de produto encontrado.</p>
+    <p><i class="fas fa-exclamation-circle"></i> Nenhum detalhe de produto encontrado.</p>
 }
 
-<a asp-action="Index" asp-controller="Produto" class="btn btn-primary">Voltar para a Lista de Produtos</a>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />

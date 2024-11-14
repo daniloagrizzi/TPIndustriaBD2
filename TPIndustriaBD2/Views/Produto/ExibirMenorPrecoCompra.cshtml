@@ -1,17 +1,25 @@
 ﻿@model TPIndustriaBD2.Models.ViewModels.CompraViewModel
 
-<h2>Menor Preço de Compra</h2>
+<h2><i class="fas fa-tag"></i> Menor Preço de Compra</h2>
 
 @if (Model != null)
 {
-    <p><strong>Fornecedor:</strong> @Model.NomeFornecedor</p>
-    <p><strong>Valor da Compra:</strong> @Model.ValorCompra.ToString("C")</p>
-    <p><strong>Quantidade Comprada:</strong> @Model.QuantidadeComprada</p>
-    <p><strong>Data da Compra:</strong> @Model.DiaCompra</p>
+    <div class="mb-3">
+        <p><strong><i class="fas fa-truck"></i> Fornecedor:</strong> @Model.NomeFornecedor</p>
+        <p><strong><i class="fas fa-dollar-sign"></i> Valor da Compra:</strong> @Model.ValorCompra.ToString("C")</p>
+        <p><strong><i class="fas fa-sort-numeric-up"></i> Quantidade Comprada:</strong> @Model.QuantidadeComprada</p>
+        <p><strong><i class="fas fa-calendar-alt"></i> Data da Compra:</strong> @Model.DiaCompra.ToString()</p>
+    </div>
 }
 else
 {
-    <p>Nenhuma compra encontrada para este produto.</p>
+    <p><i class="fas fa-exclamation-circle"></i> Nenhuma compra encontrada para este produto.</p>
 }
 
-<a asp-action="Index" asp-controller="Produto" class="btn btn-primary">Voltar para a Lista de Produtos</a>
+<div class="mt-3">
+    <a asp-action="Index" asp-controller="Produto" class="btn btn-primary">
+        <i class="fas fa-arrow-left"></i> Voltar para a Lista de Produtos
+    </a>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />

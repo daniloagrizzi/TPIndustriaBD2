@@ -1,11 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Bem-vindo ao Sistema de Gerenciamento TPIndustria";
 }
-
-<h2 class="text-center">@ViewData["Title"]</h2>
+<h2 class="text-center"> <i class="fas fa-briefcase"></i> @ViewData["Title"]</h2>
 
 <div class="text-center mt-4">
-    <p>Bem-vindo ao sistema de gerenciamento TPIndustria. Escolha uma das opcoes:</p>
+    <h2> Escolha uma das opcoes:</h2>
 
     <div class="btn-group mt-3">
         <a href="@Url.Action("RegistrarCompra", "Produto")" class="btn btn-lg btn-success">
